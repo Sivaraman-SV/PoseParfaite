@@ -1,0 +1,1 @@
+This subfolder contains contents of all the Videos/Photos that can be fed into the model to produce a fairly high accuracy output.
