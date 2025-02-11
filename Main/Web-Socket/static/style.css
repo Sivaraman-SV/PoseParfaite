@@ -1,0 +1,43 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.navbar-brand svg {
+  margin-right: 0.5rem;
+}
+
+.card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+#chat-box {
+  background-color: #f8f9fa;
+}
+
+#chat-box p {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+
+#chat-box p:nth-child(odd) {
+  background-color: #e9ecef;
+}
+
