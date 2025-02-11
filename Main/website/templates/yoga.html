@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="website\static\yoga.css">
+    <title>Know Your Form</title>
+    <style>
+        
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #333;
+  color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+} 
+.container {
+  text-align: center;
+  max-width: 600px;
+  padding: 20px;
+  background: linear-gradient(135deg, #ccc, #f0f0f0);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+h1 {
+  color: crimson;
+}
+
+p {
+  color: black;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: white;
+  background-color: crimson;
+  padding: 1em 2em;
+  border: none;
+  border-radius: .6rem;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+  font-size: 1.2em;
+}
+
+button:hover {
+  background-color: #c72c2c; 
+}
+
+button span:not(:nth-child(6)) {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 30px;
+  width: 30px;
+  background-color: #0c66ed;
+  border-radius: 50%;
+  transition: .6s ease;
+}
+
+button span:nth-child(6) {
+  position: relative;
+}
+
+button span:nth-child(1) {
+  transform: translate(-3.3em, -4em);
+}
+
+button span:nth-child(2) {
+  transform: translate(-6em, 1.3em);
+}
+
+button span:nth-child(3) {
+  transform: translate(-.2em, 1.8em);
+}
+
+button span:nth-child(4) {
+  transform: translate(3.5em, 1.4em);
+}
+
+button span:nth-child(5) {
+  transform: translate(3.5em, -3.8em);
+}
+
+button:hover span:not(:nth-child(6)) {
+  transform: translate(-50%, -50%) scale(4);
+  transition: 1.5s ease;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.image-preview {
+  position: relative;
+  width: 100px; /* Passport size */
+  height: 100px; /* Passport size */
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Maintain aspect ratio */
+}
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: crimson;
+  color: white;
+  border: none;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+video {
+  display: none;
+  width: 100%;
+  max-width: 500px;
+  margin-left: 50px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.return-home{
+    width: auto;
+    height: auto;
+    right: 650px;
+    bottom: 50px;
+
+}
+a{
+    text-decoration: none;
+}
+    </style>
+</head>
+<body>
+    <div>
+        <button class="return-home"><a href="/">Home</a></button>
+    </div>
+    <div class="container">
+        <h1>Know Your Form - YOGA</h1>
+        <p>Form is one of the most crucial aspects of yoga 
+            because it ensures that poses are performed safely and effectively. 
+            Proper form helps activate the right muscles, preventing unnecessary strain on joints and 
+            reducing the risk of injuries such as muscle tears, sprains, or back pain. It also improves workout efficiency, 
+            allowing you to build strength and flexibility, and achieve better results over time. Poor form, on the other hand, 
+            can lead to imbalances, overcompensation by the wrong muscles, and long-term issues that hinder progress. 
+            Whether you are a beginner or an experienced yogi, maintaining proper posture, alignment, and technique is key to 
+            maximizing performance and staying injury-free.</p>
+        
+        <button id="accessButton">
+            <span class="circle1"></span>
+            <span class="circle2"></span>
+            <span class="circle3"></span>
+            <span class="circle4"></span>
+            <span class="circle5"></span>
+            <span class="text">Give Camera Access</span>
+        </button>
+        <button id="uploadButton">Upload Images</button>
+        <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
+        <div id="imagePreviewContainer" class="image-preview-container"></div>
+    
+    <div id="preview"></div>
+
+        <video id="video" autoplay></video>
+        <button id="stopButton" style="display: none;">
+            <span class="circle1"></span>
+            <span class="circle2"></span>
+            <span class="circle3"></span>
+            <span class="circle4"></span>
+            <span class="circle5"></span>
+            <span class="text">Stop Camera</span></button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const accessButton = document.getElementById('accessButton');
+    const stopButton = document.getElementById('stopButton');
+    const video = document.getElementById('video');
+    let stream = null;
+
+    async function checkCameraAccess() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            accessButton.style.display = "none";
+            stopButton.style.display = "inline-block";
+            video.style.display = "block";
+            video.srcObject = stream;
+        } catch (error) {
+            console.log("Camera access not granted or error:", error);
+        }
+    }
+
+    accessButton.addEventListener("click", checkCameraAccess);
+
+    stopButton.addEventListener("click", () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop()); // Stop all camera tracks
+            video.srcObject = null; // Clear video source
+            video.style.display = "none";
+            stopButton.style.display = "none";
+            accessButton.style.display = "inline-block";
+            stream = null; // Reset stream variable to avoid unintended restart
+        }
+    });
+
+    // Check if the user has a camera, but do not auto-start
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+        if (devices.some(device => device.kind === "videoinput")) {
+            console.log("Camera detected, waiting for user to start.");
+        } else {
+            console.log("No camera detected.");
+        }
+    });
+
+    // Image upload functionality
+    uploadButton.addEventListener("click", () => {
+        imageInput.click(); // Trigger the file input click
+    });
+
+    imageInput.addEventListener("change", (event) => {
+        const files = event.target.files;
+        if (files.length > 10) {
+            alert("You can only upload a maximum of 10 images.");
+            imageInput.value = ""; // Clear the input
+            return;
+        }
+
+        // Clear previous previews
+        imagePreviewContainer.innerHTML = '';
+
+        // Process the uploaded images
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Create a preview element
+                const previewDiv = document.createElement("div");
+                previewDiv.classList.add("image-preview");
+
+                const img = document.createElement("img");
+                img.src = e.target.result;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete-button");
+                deleteButton.innerHTML = "X"; // X mark for deletion
+                deleteButton.onclick = function () {
+                    imagePreviewContainer.removeChild(previewDiv); // Remove the image preview
+                };
+
+                previewDiv.appendChild(img);
+                previewDiv.appendChild(deleteButton);
+                imagePreviewContainer.appendChild(previewDiv);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
+    
+</body>
+</html>
+
+
+
+

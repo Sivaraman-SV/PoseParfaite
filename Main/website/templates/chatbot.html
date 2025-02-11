@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Search Engine</title>
+    <style>
+        body{
+            color:rgb(0, 0, 0);
+        }
+        .expertise-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .expertise-title {
+            color: #2c5282;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: #000000;
+            border-color: #4299e1;
+        }
+
+        .response-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .search-button {
+            background-color: #4299e1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #3182ce;
+        }
+
+    
+
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="chat-container">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Fitness Chatbot</h2>
+        
+        <div class="flex flex-col items-center mb-6">
+            <input type="text" id="query" class="search-input" placeholder="Ask me anything about fitness...">
+            <button onclick="sendSearchRequest()" class="search-button">Ask Question</button>
+        </div>
+        <h3>Response:</h3>
+        <p id="result"></p>
+         
+        <div id="result" class="response-container">
+            <!-- Response will be formatted and inserted here -->
+        </div>
+    </div>
+
+    <script>
+
+
+function formatResponse(text) {
+            // Split the text into sections
+            const sections = text.split('\n');
+            let formattedHtml = '';
+            
+            sections.forEach(section => {
+                if (section.includes('**')) {
+                    // Format section titles
+                    const title = section.replace(/\*\*/g, '');
+                    formattedHtml += `
+                        <div class="expertise-card">
+                            <div class="expertise-title">${title}</div>
+                        </div>`;
+                } else if (section.trim()) {
+                    // Format regular paragraphs
+                    formattedHtml += `<p class="mb-4 text-gray-700">${section}</p>`;
+                }
+            });
+}
+
+        function sendSearchRequest() {
+    let query = document.getElementById("query").value;
+    
+    fetch("http://127.0.0.1:5000/api/search", {  // Ensure this matches Flask server
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(data => {
+        document.getElementById("result").innerText = data;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("result").innerText = "Error: Could not connect to the server.";
+    });
+}
+
+    </script>
+</body>
+</html>
+
+{% endblock %}

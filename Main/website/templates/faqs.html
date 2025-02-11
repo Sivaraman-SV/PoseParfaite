@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}FAQs{% endblock %}
+
+{% block content %} 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            line-height: 1.6;
+            margin: 0;
+        }
+        .faq {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 5%;
+            margin-bottom: 10%;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .faq h1 {
+            text-align: center;
+        }
+        .faq p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="faq">
+        <h1>Frequently Asked Questions</h1>
+        <p>Welcome to the FAQ section for the PoseParfaite Web App. Here you'll find answers to common questions about our app.</p>
+
+        <p><strong>1. What is PoseParfaite? 
+        </strong></p>
+        <p>PoseParfait is a web app designed to help you improve your posture and fitness through guided exercises and personalized feedback.</p>
+
+        <p><strong>2. How does the app track my pose?</strong></p>
+        <p>The app uses your device's camera to analyze your movements and provide real-time feedback on your posture and exercise form.</p>
+
+        <p><strong>3. Can I create multiple profiles?</strong></p>
+        <p>Yes, you can create multple profiles. </p>
+
+        <p><strong>4.Does the app store my camera data? </strong></p>
+        <p>No, the app processes your camera data locally on your device. We do not store or transmit your video feed.</p>
+    </div>
+</body>
+</html>
+
+
+
+{% endblock %}
